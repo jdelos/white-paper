@@ -1,0 +1,50 @@
+
+\usepackage{tikz-uml}
+
+\begin{figure}[ht]
+\centering
+\scalebox{0.5}{%
+\begin{tikzpicture}[node distance=1.6cm and 1.8cm]
+
+% LEFT COLUMN
+\node (rmsc) [tokencontract] {RMSCToken \nodepart{second} ERC20 \\ Peg Mechanism \nodepart{third} mint() \\ burn() \\ buyback()};
+\node (nft) [tokencontract, below=of rmsc] {FounderNFT \nodepart{second} ERC721 \\ Governance \nodepart{third} vote() \\ access()};
+
+% CENTER
+\node (protocol) [orchestrator, right=of rmsc, yshift=-1cm] {THE CALÇOTADA \nodepart{second} Orchestrator \\ Mint Engine \nodepart{third} Controller Functions};
+
+% RIGHT
+\node (fiatinput) [treasurycontract, above=of protocol] {FiatInputContract \nodepart{second} Deposit \nodepart{third} Withdraw};
+\node (onchain) [treasurycontract, below=0.8cm of fiatinput] {OnChainTreasury \nodepart{second} Store \nodepart{third} Audit};
+\node (paytreasury) [treasurycontract, right=of fiatinput] {PaydayTreasury \nodepart{second} Pay \nodepart{third} Distribute};
+
+\node (daobuybacks) [contract, right=of protocol, yshift=-1cm] {DAOBuybacks \nodepart{second} Convertible Note \\ SAFE + Equity \nodepart{third} execute() \\ validate()};
+\node (daotube) [contract, right=of daobuybacks] {DAOTube \nodepart{second} Buyback Handler \nodepart{third} process() \\ distribute()};
+\node (instruments) [contract, below=of daotube] {Instruments \nodepart{second} Financial Tools \nodepart{third} convert() \\ redeem()};
+\node (userwallet) [contract, below=of instruments] {UserWallet \nodepart{second} Balance Manager \nodepart{third} deposit() \\ withdraw()};
+
+% BOTTOM
+\node (taxpool1) [treasurycontract, below=of nft, xshift=3cm] {TaxedLiquidityPool \nodepart{second} Exit Tax Handler \nodepart{third} collect() \\ redistribute()};
+\node (taxpool2) [treasurycontract, below=of daobuybacks] {TaxedLiquidityPool \nodepart{second} Exit Tax Handler \nodepart{third} collect() \\ redistribute()};
+
+% ARROWS
+\draw [arrow] (fiatinput) -- (onchain);
+\draw [arrow] (fiatinput) -- (paytreasury);
+\draw [arrow] (paytreasury) |- (daotube);
+\draw [arrow] (onchain) -- (protocol);
+
+\draw [arrow] (rmsc) -- (protocol);
+\draw [arrow] (nft) -- (protocol);
+
+\draw [arrow] (protocol) -- (daobuybacks);
+\draw [arrow] (daobuybacks) -- (daotube);
+\draw [arrow] (daotube) -- (instruments);
+\draw [arrow] (instruments) -- (userwallet);
+
+\draw [arrow] (protocol) -- (taxpool1);
+\draw [arrow] (daobuybacks) -- (taxpool2);
+
+\end{tikzpicture}%
+}%
+\caption{Calçotada Protocol smart contract architecture: UML-style representation showing contract classes, interfaces, and function signatures for the dual-token system.}
+\end{figure}

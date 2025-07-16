@@ -8,6 +8,9 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
 \begin{document}
 
 \title{The Calçotada Protocol: \ Equity Peg Tokens for Decentralized Venture Capital}
@@ -89,7 +92,35 @@ The Calçotada Protocol bridges these gaps by:
 
 
 
+\section{Fundamental Key Assets and On-Chain Accountancy}
+A primary innovation of the Calçotada Protocol is the incorporation of on-chain accountancy as a transparent foundation for venture valuations, investor returns, and protocol trust. This section reviews the strategic assets necessary for protocol integrity and public confidence, highlighting how on-chain financial tracking directly informs estimated valuations and buyback commitments.
+
+\subsection{On-Chain Accountancy}
+Unlike traditional venture frameworks—where assessment of company value and investor ROI rely on opaque, often delayed financial reporting—the Calçotada Protocol mandates continuous, verifiable financial accounting on-chain. All critical financial flows (revenue, costs, operational reserves, distributions) are recorded in transparent smart contracts.
+
+This enables:
+\begin{itemize}
+    \item \textbf{Real-time, tamper-proof valuation:} Investors and protocol governors can view up-to-date figures at any point, reducing ambiguity or information asymmetry.
+    \item \textbf{Reliable ROI estimates:} Using industry-standard financial metrics (see next subsection), the protocol can project and periodically update company valuations and potential ROI for token holders.
+    \item \textbf{Algorithmic buyback triggers:} Token buyback amounts and conditions are derived from on-chain accounting data, automating investor returns and aligning incentives.
+\end{itemize}
+
+\subsection{Valuation Methodology and Financial Modeling}
+To ensure that buybacks reflect fundamentally justified valuations, the protocol leverages conventional startup valuation techniques. The accompanying \texttt{Tokenomics RMSC.ods} model calculates buyback scenarios and expected valuations based on revenue multiples, discounted cash flows, or other startup-typical factors. These methods are encoded in oracles or contract formulas, supporting automated, auditable financial flows without need for off-chain negotiations.
+
+This structure allows retail and institutional investors to benefit from return estimates and exit strategies anchored in both blockchain transparency and accepted financial practice—even before actual company liquidity events.
+
+\subsection{Additional Key Assets}
+\begin{itemize}
+    \item \textbf{Smart Contracts:} All protocol commitments (NFTs, RMSC tokenomics, buybacks, treasury reserve) are transparently on-chain.
+    \item \textbf{External Oracles:} For validation of off-chain revenue or event triggers as needed.
+    \item \textbf{Decentralized Governance:} Founder NFTs enable participatory protocol upgrades and control structures.
+\end{itemize}
+
 \section{Protocol Architecture}
+
+\input{diagram.tex}
+% \input{calcotada_protocol_diagram.tex}
 
 The Calçotada Protocol introduces a two-asset system deployed on the Polygon blockchain to facilitate decentralized venture funding. It combines the governance and access logic of non-fungible tokens (NFTs) with a fungible financial token (RMSC) that is economically pegged to the company’s future valuation.
 
@@ -169,23 +200,28 @@ A total of 5,300 Founder NFTs are issued across six batches. Each batch defines 
 \begin{table}[ht]
 \caption{NFT Batches and Associated RMSC Minting}
 \centering
-\small
-\begin{tabular}{|l|c|c|}
+\scriptsize
+\begin{tabular}{|p{1.5cm}|p{0.6cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|}
 \hline
-\textbf{Batch} & \textbf{NFT €} & \textbf{RMSC €} \\
+\textbf{Batch} & \textbf{NFTs} & \textbf{NFT €} & \textbf{RMSC €} & \textbf{MINT kRMSC} \\
 \hline
-Calçot Coins     & 100  & 0.40  \\
-FounderPass 1    & 125  & 0.50  \\
-FounderPass 2    & 250  & 0.525 \\
-FounderPass 3    & 375  & 0.55  \\
-FounderPass 4    & 500  & 0.575 \\
-FounderPass 5    & 625  & 0.60  \\
+Calçot Coins     & 333  & 100  & 0.40  & 66  \\
+FounderPass 1    & 555  & 125  & 0.50  & 139  \\
+FounderPass 2    & 1111 & 250  & 0.525 & 529  \\
+FounderPass 3    & 1111 & 375  & 0.55  & 757  \\
+FounderPass 4    & 1111 & 500  & 0.575 & 966  \\
+FounderPass 5    & 1111 & 625  & 0.60  & 1,157  \\
 \hline
-\multicolumn{3}{|c|}{\textbf{Total: 3,615,593 € raised}} \\
-\multicolumn{3}{|c|}{\textbf{1,807,796 RMSC minted}} \\
+\multicolumn{5}{|c|}{\textbf{Total: 5,332 NFTs}} \\
+\multicolumn{5}{|c|}{\textbf{2,047,025 € raised, 1,807,796 RMSC minted}} \\
 \hline
 \end{tabular}
 \end{table}
+
+
+
+
+
 
 Half of the RMSC minted for each NFT is transferred to the protocol treasury, while the remaining half is consumed by the NFT minting contract. This ensures that treasury-backed liquidity grows proportionally with capital raised.
 

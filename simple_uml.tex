@@ -1,0 +1,123 @@
+%
+% Simple UML Class Diagram for Calçotada Protocol
+%
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{fullpage}
+
+\usepackage{tikz-uml}
+
+\title{Calçotada Protocol: UML Class Diagram}
+\author{Smart Contract Architecture}
+
+\begin{document}
+
+\maketitle
+
+\section{Smart Contract Class Diagram}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{umlpackage}{CalcotadaProtocol}
+
+% Token Contracts
+\umlclass[x=0, y=0]{RMSCToken}{
+  + totalSupply : uint256 \\
+  + pegValue : uint256 \\
+  + buybackPool : uint256
+}{
+  + mint(amount : uint256) : bool \\
+  + burn(amount : uint256) : bool \\
+  + buyback(amount : uint256) : bool \\
+  + updatePeg(newValue : uint256) : bool
+}
+
+\umlclass[x=0, y=-4]{FounderNFT}{
+  + totalSupply : uint256 \\
+  + votingPower : mapping \\
+  + accessLevel : mapping
+}{
+  + mint(to : address) : uint256 \\
+  + vote(proposalId : uint256) : bool \\
+  + checkAccess(user : address) : bool
+}
+
+% Treasury Contracts
+\umlclass[x=8, y=0]{OnChainTreasury}{
+  + balance : uint256 \\
+  + reserves : mapping \\
+  + auditLog : Event[]
+}{
+  + deposit(amount : uint256) : bool \\
+  + withdraw(amount : uint256) : bool \\
+  + audit() : AuditResult
+}
+
+\umlclass[x=8, y=-4]{PaydayTreasury}{
+  + payoutSchedule : mapping \\
+  + distributionRules : struct
+}{
+  + schedulePayment(recipient : address, amount : uint256) : bool \\
+  + distribute() : bool
+}
+
+% Core Protocol
+\umlclass[x=4, y=-2]{CalcotadaOrchestrator}{
+  + tokenContracts : address[] \\
+  + treasuryContracts : address[] \\
+  + governanceRules : struct
+}{
+  + orchestrate() : bool \\
+  + validateTransaction(tx : Transaction) : bool \\
+  + executeGovernance(proposal : Proposal) : bool
+}
+
+% DAO Contracts
+\umlclass[x=12, y=-2]{DAOBuybacks}{
+  + buybackQueue : Transaction[] \\
+  + executionRules : struct
+}{
+  + queueBuyback(amount : uint256) : bool \\
+  + executeBuyback() : bool \\
+  + validateConvertibleNote(note : ConvertibleNote) : bool
+}
+
+\end{umlpackage}
+
+% Relationships
+\umluniaggreg[mult1=1, mult2=*]{CalcotadaOrchestrator}{RMSCToken}
+\umluniaggreg[mult1=1, mult2=*]{CalcotadaOrchestrator}{FounderNFT}
+\umluniaggreg[mult1=1, mult2=*]{CalcotadaOrchestrator}{OnChainTreasury}
+\umluniaggreg[mult1=1, mult2=*]{CalcotadaOrchestrator}{PaydayTreasury}
+\umluniaggreg[mult1=1, mult2=1]{CalcotadaOrchestrator}{DAOBuybacks}
+
+\umlassoc[mult1=1, mult2=*]{RMSCToken}{DAOBuybacks}
+\umlassoc[mult1=*, mult2=1]{FounderNFT}{CalcotadaOrchestrator}
+
+\end{tikzpicture}
+\end{center}
+
+\section{Contract Descriptions}
+
+\subsection{RMSCToken}
+ERC20 token with equity peg mechanism and buyback functionality.
+
+\subsection{FounderNFT}
+ERC721 token providing governance rights and access control.
+
+\subsection{CalcotadaOrchestrator}
+Main protocol controller managing token minting, treasury operations, and governance execution.
+
+\subsection{OnChainTreasury}
+Secure storage and management of protocol funds with audit capabilities.
+
+\subsection{PaydayTreasury}
+Handles scheduled payments and profit distribution to token holders.
+
+\subsection{DAOBuybacks}
+Manages buyback operations and convertible note redemption.
+
+\end{document}
