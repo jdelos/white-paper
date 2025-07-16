@@ -23,7 +23,7 @@ email@example.com}}
 \maketitle
 
 \begin{abstract}
-This paper introduces the Calçotada Protocol, a blockchain-based approach designed to democratize access to early-stage venture capital by issuing tokenized convertible notes pegged directly to startup valuations. By addressing the inherent inequities and innovation limitations of traditional venture capital models, our protocol provides liquidity and governance rights through decentralized autonomous organizations (DAOs), bridging the gap between non-crypto startups and blockchain funding mechanisms.
+This paper presents the Calçotada Protocol, a blockchain-based framework for democratizing early-stage venture capital through tokenized convertible notes designed to track startup valuations. The protocol implements a dual-token architecture combining ERC721 NFTs for governance participation with ERC20 RMSC tokens for economic exposure. Built on Polygon with Chainlink oracle integration, the system features sophisticated bonding curve pricing, automated treasury management, and transparent on-chain fundraising mechanics. While the current implementation provides core token infrastructure, future development will add on-chain accountancy, automated buyback mechanisms, and full DAO governance to create a complete decentralized venture capital platform accessible to retail investors.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -38,9 +38,11 @@ This entrenched model of early-stage investing not only restricts innovation to 
 
 Blockchain technology offers a foundational shift in this dynamic by enabling decentralized autonomous organizations (DAOs) and token-based governance models to democratize access to venture-stage capital and decision-making processes.
 
-The Calçotada Protocol is our practical response to this systemic imbalance. It provides a structured, transparent on-chain mechanism that directly links token ownership to startup valuations and governance rights. Through tokenized convertible notes, the protocol allows individual investors—not just large institutions—to meaningfully participate in both the financial and governance aspects of promising startups at their earliest stages.
+The Calçotada Protocol is our practical response to this systemic imbalance. It presents a vision for structured, transparent on-chain mechanisms that will link token ownership to startup valuations and governance rights. Through tokenized convertible notes, the protocol aims to allow individual investors—not just large institutions—to meaningfully participate in both the financial and governance aspects of promising startups at their earliest stages.
 
-This protocol was specifically developed to meet the funding requirements of The Calçotada Company, a food-tech startup with a disruptive and validated business model. The innovative nature of this company has inspired the development of Equity Peg Tokens as a foundational mechanism for exploring Decentralized Autonomous Venture Capital (DAVC). Moreover, the protocol aims explicitly to bridge the gap between traditional, non-crypto startups and blockchain-based funding mechanisms, thus enabling broader, more inclusive access to early-stage venture capital opportunities.
+This whitepaper presents both the current Minimum Viable Product (MVP) implementation and the complete protocol vision. The MVP, consisting of 333 Genesis NFTs and foundational smart contracts, serves as a proof of concept and market validation tool. With a modest target of €30,000, this initial phase focuses on validating interest, building a core team, and establishing fundamental protocol standards before expanding to the full implementation.
+
+The protocol was specifically developed to meet the funding requirements of The Calçotada Company, a food-tech startup with a disruptive and validated business model. This measured approach—starting with an MVP and growing based on community feedback—ensures that the protocol development remains aligned with real market needs while building the foundation for Decentralized Autonomous Venture Capital (DAVC).
 
 \section{Prior Art and Related Work}
 
@@ -122,48 +124,126 @@ This structure allows retail and institutional investors to benefit from return 
 \input{diagram.tex}
 % \input{calcotada_protocol_diagram.tex}
 
-The Calçotada Protocol introduces a two-asset system deployed on the Polygon blockchain to facilitate decentralized venture funding. It combines the governance and access logic of non-fungible tokens (NFTs) with a fungible financial token (RMSC) that is economically pegged to the company’s future valuation.
+The Calçotada Protocol implements a sophisticated two-asset system deployed on the Polygon blockchain to facilitate decentralized venture funding. The architecture consists of four core smart contracts that work in concert: CalcotCoin (NFT), Romesco (RMSC token), Calçotada (orchestrator), and NormalizeToEuro (oracle integration). This system combines governance through non-fungible tokens (NFTs) with economic participation via fungible tokens (RMSC) that are designed to track company valuation.
 
-\subsection{Founder NFT: Governance and Foundational Access}
+\subsection{CalcotCoin NFT: Governance and Foundational Access}
 
-The \textit{Founder NFT} is designed to recognize individuals who commit early to the venture. It does not represent equity, but instead grants access to governance, decision-making forums, and exclusive founder-level interactions.
+The \textit{CalcotCoin} (CEBA) contract implements an ERC721 NFT system designed to recognize early supporters and provide governance rights. The current implementation features:
 
-NFT holders receive:
+\textbf{Technical Specifications:}
 \begin{itemize}
-    \item One vote per wallet (regardless of how many NFTs held), enabling DAO-based governance.
-    \item Participation in key decisions regarding valuation recognition, exit discussions, and capital allocation.
-    \item Access to Town Meetings and direct communication with the founding team.
+    \item Fixed supply of 333 NFTs (CEBA Genesis edition)
+    \item 33 tokens reserved for treasury (10\% allocation)
+    \item Linear pricing mechanism from 222.22 to 200 RMSC per NFT
+    \item Base price of 100 EUR per NFT with dynamic RMSC conversion
 \end{itemize}
 
-The governance framework will be co-defined by the first 300 NFT holders. These holders act as constitutional stewards, helping define smart-contract upgrade policies, liquidity tax thresholds, and mechanisms for handling capital extensions.
+\textbf{Minting Mechanism:}
+The CalcotCoin contract implements a sophisticated dual-minting system where NFT purchases trigger a 2x RMSC mint. When purchasing an NFT:
+\begin{enumerate}
+    \item The buyer receives 2x the NFT price in newly minted RMSC
+    \item Half of the RMSC is automatically transferred to the treasury as payment
+    \item The buyer retains the other half as a bonus incentive
+    \item The NFT is minted to the buyer's address
+\end{enumerate}
 
-To foster long-term alignment, NFTs are issued in two fixed batches (333 + 5555 units). A \textit{Taxed Liquidity Pool} (TLP), funded with 10\% of each NFT purchase (paid in RMSC), allows early resale of tokens with a 15--25\% penalty. These tax revenues are reinvested into the pool to support future liquidity and will be removed once the protocol activates its buyback mechanism.
+\textbf{Planned Governance Features:}
+\begin{itemize}
+    \item One vote per wallet (implementation pending)
+    \item Participation in valuation recognition and capital allocation decisions
+    \item Access to exclusive founder communications
+\end{itemize}
+
+Note: The whitepaper originally specified 6 batches totaling 5,888 NFTs. The current implementation focuses on the initial 333-unit genesis collection, with future batches to be deployed based on protocol evolution and community feedback.
 
 \subsection{RMSC Token: Equity-Pegged Financial Instrument}
 
-The \textit{Romesco Token (RMSC)} is the core financial instrument of the protocol. It is a fungible token that directly reflects the economic value of the seed capital raised by the company.
+The \textit{Romesco Token (RMSC)} is the core financial instrument of the protocol, implemented as an ERC20 token with ERC1363 and ERC20Permit extensions for enhanced functionality.
 
-Key attributes include:
+\textbf{Technical Implementation:}
 \begin{itemize}
-    \item A fixed maximum supply of 5 million RMSC.
-    \item Buybacks funded from 10\% of The Calçotada Company’s profits, triggered by observed company valuation.
-    \item A projected buyback range between €1.5 and €3.0 per RMSC over 5 years, starting from an issuance price of approximately €0.40.
+    \item Fixed maximum supply of 5,000,000 RMSC (hard cap enforced in contract)
+    \item Initial pre-mint of 200,000 RMSC for liquidity and operational needs
+    \item Pausable functionality for emergency situations
+    \item Permit functionality for gasless approvals
+    \item ERC1363 support for single-transaction transfers and callbacks
 \end{itemize}
 
-Unlike traditional token offerings that rely on speculative value, RMSC is designed to mimic the behavior of equity shares through a strict PEG mechanism. This PEG is enforced through smart contracts and verified by an external executor, ensuring the transparency and credibility of valuation-based redemption.
-
-The ultimate goal is to make RMSC compatible with external DeFi protocols—such as MakerDAO—so that token holders can use them as collateral, benefiting from liquidity while maintaining exposure to the startup's success.
-
-\subsection{PEG Enforcement and Trust Minimization}
-
-At the heart of the protocol lies the commitment to a transparent and enforceable relationship between company valuation and token value. The PEG mechanism is:
+\textbf{Economic Design:}
 \begin{itemize}
-    \item Defined in smart contracts,
-    \item Triggered via external valuation attestations (e.g., revenue audits, funding rounds),
-    \item Executed by an oracle-integrated contract or independent third-party executor.
+    \item Minting controlled by the orchestrator contract only
+    \item No burn functionality for regular users (maintains supply integrity)
+    \item Designed for future buyback mechanism at €1.5–€3.0 per RMSC
+    \item Starting valuation implies approximately €0.40–€0.60 per RMSC
 \end{itemize}
 
-This architecture ensures that investors do not rely on discretion or governance votes for their buyback rights—bringing the discipline of financial equity to blockchain-native funding structures.
+\textbf{Integration Features:}
+The RMSC token is designed for composability with DeFi protocols:
+\begin{itemize}
+    \item ERC20Permit enables gasless transactions and meta-transactions
+    \item ERC1363 allows for advanced payment flows and automated callbacks
+    \item Standard ERC20 interface ensures compatibility with all major DEXs and lending protocols
+\end{itemize}
+
+Note: The buyback mechanism mentioned in the economic design is planned for future implementation through a separate contract that will interact with the on-chain accountancy system.
+
+\subsection{Calçotada Orchestrator: Protocol Coordination}
+
+The \textit{Calçotada} contract serves as the central orchestrator, coordinating interactions between all protocol components:
+
+\textbf{Core Functions:}
+\begin{itemize}
+    \item Manages the dual-minting mechanism for NFT purchases
+    \item Controls RMSC minting according to bonding curve pricing
+    \item Handles both public and private sale mechanisms
+    \item Integrates with NormalizeToEuro for multi-currency support
+\end{itemize}
+
+\textbf{Bonding Curve Implementation:}
+The orchestrator implements a sophisticated normalized bonding curve using:
+\begin{itemize}
+    \item Q16.16 fixed-point arithmetic for precision
+    \item Configurable sigmoid curve shape for optimal price discovery
+    \item Integration with trapezoidal rule for accurate pricing
+    \item Starting price: €0.40 per RMSC, ending price: €0.60 per RMSC
+\end{itemize}
+
+\textbf{Transaction Fee Structure:}
+\begin{itemize}
+    \item NFT purchases: €4.50 transaction fee
+    \item RMSC purchases: €2.50 transaction fee
+    \item Fees collected in POL and forwarded to treasury
+\end{itemize}
+
+\subsection{Price Oracle Integration}
+
+The \textit{NormalizeToEuro} contract provides real-time price conversion using Chainlink oracles:
+
+\textbf{Oracle Feeds:}
+\begin{itemize}
+    \item ETH/USD, EUR/USD, and POL/USD price feeds
+    \item Automatic conversion between EUR pricing and POL payments
+    \item 18-decimal precision for all calculations
+\end{itemize}
+
+\subsection{PEG Enforcement and Future Development}
+
+While the current implementation provides the foundation for equity-pegged tokens, the full PEG mechanism awaits implementation:
+
+\textbf{Current State:}
+\begin{itemize}
+    \item Token supply and pricing mechanisms are fully implemented
+    \item Oracle integration provides real-time price conversion
+    \item Treasury accumulation occurs automatically
+\end{itemize}
+
+\textbf{Planned Enhancements:}
+\begin{itemize}
+    \item On-chain accountancy module for transparent financial tracking
+    \item Automated buyback contracts triggered by valuation milestones
+    \item Governance voting mechanisms for NFT holders
+    \item Integration with external valuation attestation services
+\end{itemize}
 
 \subsection{Initial Supply and Distribution}
 
@@ -191,11 +271,21 @@ This initial supply model ensures that token distribution is fully aligned with 
 
 \subsection{Initial Distribution and Structured Pricing}
 
-The initial token distribution follows a hybrid model that aligns supply growth with funding milestones and investor risk profiles. This model rewards early participants with favorable pricing and steadily increases both NFT and RMSC costs as capital accumulates.
+The protocol implements a sophisticated pricing mechanism that balances early adopter incentives with sustainable fundraising:
 
-\subsubsection{NFT-Based RMSC Minting}
+\subsubsection{Current Implementation: Genesis Collection}
 
-A total of 5,300 Founder NFTs are issued across six batches. Each batch defines both the fixed price of the NFT and the RMSC price at which capital is received. This dual mechanism ties mint pricing to capital inflow, creating a natural reward curve for early investors.
+The deployed contracts focus on the initial CalcotCoin Genesis collection:
+\begin{itemize}
+    \item 333 total NFTs with 33 reserved for treasury
+    \item Linear RMSC pricing from 222.22 to 200 RMSC per NFT
+    \item Fixed EUR price of €100 per NFT
+    \item Dual-minting mechanism providing 2x RMSC to NFT buyers
+\end{itemize}
+
+\subsubsection{Future Batch Structure}
+
+The protocol design accommodates future expansion through additional NFT collections:
 
 \begin{table}[ht]
 \caption{NFT Batches and Associated RMSC Minting}
@@ -225,9 +315,25 @@ FounderPass 5    & 1111 & 625  & 0.60  & 1,157  \\
 
 Half of the RMSC minted for each NFT is transferred to the protocol treasury, while the remaining half is consumed by the NFT minting contract. This ensures that treasury-backed liquidity grows proportionally with capital raised.
 
-\subsubsection{Public Issuance and Bonding Curve}
+\subsubsection{Public RMSC Issuance via Bonding Curve}
 
-After completing all NFT batches, a remaining supply of approximately 1,384,407 RMSC is made available for direct purchase. These tokens are priced using a sigmoid bonding curve, which smoothly increases token cost as more supply is consumed.
+The Calçotada orchestrator implements a sophisticated bonding curve mechanism for public RMSC sales:
+
+\textbf{Technical Implementation:}
+\begin{itemize}
+    \item Normalized sigmoid curve stored as Q16.16 fixed-point values
+    \item Configurable curve shape via uploadable parameters
+    \item 16-step trapezoidal integration for accurate pricing
+    \item Real-time POL/EUR conversion via Chainlink oracles
+\end{itemize}
+
+\textbf{Pricing Parameters:}
+\begin{itemize}
+    \item Starting price: €0.40 per RMSC
+    \item Ending price: €0.60 per RMSC  
+    \item Available supply: Up to 4.6M RMSC (after pre-mint and NFT allocations)
+    \item Transaction fee: €2.50 per purchase
+\end{itemize}
 \begin{figure}[ht]
 \centering
 \begin{tikzpicture}
@@ -263,9 +369,24 @@ This curve allows the protocol to capture higher marginal funding value while ma
 
 \subsubsection{Liquidity and Secondary Market Strategy}
 
-To support early liquidity, the protocol establishes a \textit{Taxed Liquidity Pool} (TLP) funded by 10\% of each NFT’s payment (in RMSC). This pool allows investors to exit early by selling RMSC back to the market, though a tax ranging from 15\% to 25\% is imposed to discourage short-term speculation. All collected tax revenue is recycled back into the pool to support deeper liquidity. Once buybacks are activated via company profit, the tax is removed entirely.
+The protocol's liquidity strategy leverages standard DeFi infrastructure:
 
-This mechanism provides a soft-vesting behavior without locking capital, aligning incentives across long-term holders, early contributors, and future participants.
+\textbf{Current Implementation:}
+\begin{itemize}
+    \item RMSC is a standard ERC20 token, compatible with all major DEXs
+    \item Treasury accumulates POL and RMSC for future liquidity provision
+    \item No transfer restrictions or vesting schedules
+\end{itemize}
+
+\textbf{Planned Liquidity Features:}
+\begin{itemize}
+    \item DEX liquidity pools on QuickSwap or Uniswap V3
+    \item Treasury-funded initial liquidity provision
+    \item Potential liquidity mining incentives for early providers
+    \item Integration with lending protocols for RMSC collateralization
+\end{itemize}
+
+Note: The Taxed Liquidity Pool (TLP) mentioned in the original design is deferred to future protocol upgrades, allowing for simpler initial deployment and community-driven liquidity solutions.
 
 
 \subsection{Network Deployment}
@@ -281,17 +402,151 @@ Deploying on Polygon enables frictionless user participation while ensuring comp
 
 
 
-This section outlines the technical architecture of the Calçotada Protocol, detailing how tokenized convertible notes are implemented and managed on the blockchain.
+\section{Technical Implementation}
 
-\subsection{Core Components}
+\subsection{Smart Contract Architecture}
 
-The protocol consists of several key components that work together to create a transparent and efficient equity peg token system. These components include smart contracts for token issuance, valuation tracking mechanisms, and governance structures.
+The Calçotada Protocol consists of four core smart contracts deployed on Polygon:
 
-\subsection{Implementation Details}
+\textbf{1. CalcotCoin.sol (ERC721):}
+\begin{itemize}
+    \item Manages NFT issuance and ownership
+    \item Implements linear pricing mechanism
+    \item Handles treasury pre-allocation
+    \item Integrates with orchestrator for minting
+\end{itemize}
 
-The technical implementation leverages established blockchain infrastructure to ensure security, transparency, and decentralization while maintaining compatibility with traditional venture capital structures.
+\textbf{2. Romesco.sol (ERC20):}
+\begin{itemize}
+    \item Implements capped token supply (5M RMSC)
+    \item Provides ERC1363 and Permit extensions
+    \item Controlled minting via orchestrator only
+    \item Pausable for emergency situations
+\end{itemize}
 
-(Further technical details to be developed in subsequent versions.)
+\textbf{3. Calcotada.sol (Orchestrator):}
+\begin{itemize}
+    \item Coordinates all protocol interactions
+    \item Implements bonding curve pricing
+    \item Manages dual-minting mechanism
+    \item Handles fee collection and treasury forwarding
+\end{itemize}
+
+\textbf{4. NormalizeToEuro.sol (Oracle):}
+\begin{itemize}
+    \item Integrates Chainlink price feeds
+    \item Provides EUR/POL/ETH conversions
+    \item Ensures accurate multi-currency pricing
+\end{itemize}
+
+\subsection{Security Considerations}
+
+\textbf{Access Control:}
+\begin{itemize}
+    \item Owner-controlled administrative functions
+    \item Orchestrator pattern for inter-contract calls
+    \item No external minting access on token contracts
+\end{itemize}
+
+\textbf{Safety Features:}
+\begin{itemize}
+    \item ReentrancyGuard on all payment functions
+    \item Pausable functionality for emergency response
+    \item Overflow protection via Solidity 0.8.28
+    \item Battle-tested OpenZeppelin libraries
+\end{itemize}
+
+\subsection{Gas Optimization}
+
+\begin{itemize}
+    \item Batch minting reduces per-NFT gas costs
+    \item Q16.16 arithmetic minimizes computational overhead
+    \item Efficient storage patterns in bonding curve
+    \item Optimized loops with unchecked arithmetic where safe
+\end{itemize}
+
+\section{Conclusion and Future Work}
+
+The Calçotada Protocol represents a significant step toward democratizing venture capital through blockchain technology. By implementing tokenized convertible notes with clear valuation pegs, the protocol creates a bridge between traditional startup funding and decentralized finance.
+
+\subsection{Current MVP Implementation}
+
+The deployed Minimum Viable Product serves as a proof of concept and market validation tool:
+
+\textbf{Implemented Features:}
+\begin{itemize}
+    \item Genesis collection of 333 CalçotCoin NFTs at €100 each
+    \item RMSC token with 5M supply cap and bonding curve mechanics
+    \item Dual-minting system rewarding early supporters
+    \item Oracle integration for EUR/POL price conversion
+    \item Basic treasury accumulation mechanism
+\end{itemize}
+
+\textbf{MVP Objectives:}
+\begin{itemize}
+    \item Demonstrate technical feasibility of tokenized venture funding
+    \item Validate market demand with €30,000 initial raise target
+    \item Build initial community of supporters and advisors
+    \item Test smart contract security and gas efficiency
+    \item Establish foundation for future protocol development
+\end{itemize}
+
+This MVP represents a testimonial to the work ahead, starting with a solid foundation of minting strategies and bonding curve sales mechanisms. The limited scope allows for careful iteration based on community feedback before expanding to the full protocol vision.
+
+\subsection{Development Roadmap}
+
+The current deployment represents a Minimum Viable Product (MVP) designed to validate market interest and establish the foundational infrastructure. The roadmap prioritizes sustainable growth and community building over rapid feature deployment.
+
+\textbf{Whitepaper Publication and Protocol Launch:}
+This whitepaper will be released concurrently with the public announcement of the Calçotada Protocol, marking the official start of Phase 1.
+
+\textbf{Phase 1 - MVP Validation and Team Formation (Current - Q3 2024):}
+\begin{itemize}
+    \item Target: Raise initial €30,000 through Genesis collection (333 NFTs)
+    \item Validate market interest and protocol mechanics
+    \item Build core team for protocol development
+    \item Present protocol to major blockchain networks and communities
+    \item Establish fundamental protocol standards
+    \item Define trustworthy governance framework
+\end{itemize}
+
+\textbf{Phase 2 - Protocol Expansion (Q4 2024 - 2025):}
+\begin{itemize}
+    \item Launch second NFT collection (September 2024 target)
+    \item Release full 5,555 NFT collection based on community feedback
+    \item Define operational phases for The Calçotada Company
+    \item Establish protocol update and governance strategies
+    \item Begin development of on-chain accountancy framework
+\end{itemize}
+
+\textbf{Phase 3 - Operations Launch (2025-2026):}
+\begin{itemize}
+    \item Calçotada Company begins operations with collected funds
+    \item First products delivered to market
+    \item Protocol provides initial company valuation estimates
+    \item Deploy liquidity pools on major DEXs
+    \item Implement basic financial reporting on-chain
+\end{itemize}
+
+\textbf{Phase 4 - Value Realization (2027+):}
+\begin{itemize}
+    \item Initiate first buyback programs based on company profits
+    \item Define and communicate exit strategies for token holders
+    \item Expand protocol to support additional portfolio companies
+    \item Establish Calçotada Protocol as standard for tokenized venture funding
+\end{itemize}
+
+\subsection{Research Directions}
+
+Future research will explore:
+\begin{itemize}
+    \item Optimal bonding curve parameters for different funding stages
+    \item Integration of zero-knowledge proofs for private financial data
+    \item Cross-chain implementations for broader accessibility
+    \item Regulatory compliance frameworks for security token standards
+\end{itemize}
+
+The Calçotada Protocol MVP demonstrates the technical feasibility of tokenized venture funding while prioritizing community validation and sustainable growth. By starting with a focused Genesis collection of 333 NFTs, the protocol seeks to validate market interest, build a dedicated team, and establish fundamental standards before expanding to its full vision. This measured approach ensures that when the protocol scales to support The Calçotada Company's operations and eventual buybacks, it will do so with proven mechanics, community trust, and a clear path to delivering value to all stakeholders. The journey from MVP to full protocol implementation represents not just a technical roadmap, but a new model for inclusive, transparent venture capital.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
