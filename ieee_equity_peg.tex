@@ -103,10 +103,9 @@ In \textit{Power and Progress} (2023), Acemoglu and Johnson open with a powerful
 This systemic bias is amplified by the structure of the VC industry itself, which filters startup potential through a small number of high-net-worth individuals and institutions. The result is a cycle of centralized decision-making and trend-following capital allocation, as documented in works by Gompers and Lerner \cite{gompers2004venture} and more recently by Kenney and Zysman \cite{kenney2019platform}.
 
 \subsection{The Rise—and Limits—of Token-Based Startup Financing}
+Blockchain-based financing emerged as a promising alternative to VC dominance. ICOs, in particular, were initially seen as a democratized fundraising mechanism. However, studies such as Howell et al. (2020)~\cite{howell2020initial} and Catalini \& Gans (2019)~\cite{catalini2019some} found that token value in these offerings was often driven by speculative market sentiment rather than by startup fundamentals. The lack of intrinsic utility or rights backing these tokens made them volatile and prone to pump-and-dump cycles.
 
-Blockchain-based financing emerged as a promising alternative to VC dominance. ICOs, in particular, were initially seen as a democratized fundraising mechanism. However, studies such as Howell et al. (2020) \cite{howell2020initial} and Catalini \& Gans (2019) \cite{catalini2019some} found that token value in these offerings was often driven by speculative market sentiment rather than by startup fundamentals. The lack of intrinsic utility or rights backing these tokens made them volatile and prone to pump-and-dump cycles.
-
-Attempts to bridge token value with financial fundamentals include models like the Simple Agreement for Future Tokens (SAFT), token warrants \cite{lw2019token}, and hybrid governance protocols (e.g., Compound, MakerDAO). Yet these models stop short of enforcing a valuation peg—a strict, transparent link between company performance and token economics.
+Attempts to bridge token value with financial fundamentals include models like the Simple Agreement for Future Tokens (SAFT), token warrants~\cite{lw2019token}, and hybrid governance protocols (e.g., Compound, MakerDAO). Yet these models stop short of enforcing a valuation peg—a strict, transparent link between company performance and token economics.
 
 Moreover, the majority of these fundraising models have been designed to serve crypto-native projects—protocols, DeFi platforms, and dApps—rather than general startups with traditional product-market strategies or offline operations. This creates a structural exclusion: while crypto capital is abundant, it remains inaccessible to founders outside the ecosystem who lack deep technical ties to Web3 culture or tooling.
 
@@ -114,7 +113,7 @@ As blockchain infrastructure matures and regulatory clarity improves, there is a
 
 \subsection{The Missing Piece: Equity Peg Tokens}
 
-Recent research by Cao (2023) \cite{cao2023token} differentiates between token and equity-based startup financing, concluding that token sales provide liquidity but introduce misalignment risks unless structured to reflect startup success metrics. This gap motivates the core innovation of the Calçotada Protocol: the design of Performance Equity Growth (PEG) tokens, which are governed by on-chain logic tied to company valuation.
+Recent research by Cao (2023)~\cite{cao2023token} differentiates between token and equity-based startup financing, concluding that token sales provide liquidity but introduce misalignment risks unless structured to reflect startup success metrics. This gap motivates the core innovation of the Calçotada Protocol: the design of Performance Equity Growth (PEG) tokens, which are governed by on-chain logic tied to company valuation.
 
 PEG tokens act as a synthetic representation of equity performance—without requiring the legal complexity of security issuance—by enforcing treasury-backed buyback mechanics once valuation milestones are achieved. This model builds on the foundations of tokenized convertible instruments but extends them with financial enforcement via smart contracts, oracle-fed financial data, and protocol-level transparency.
 
@@ -128,7 +127,7 @@ Recent studies highlight that meme coins (e.g., Dogecoin, Shiba Inu, PEPE, and \
 
 Far from being irrational, these users are seeking accessible, high-upside entry points—currently unavailable through traditional equity mechanisms. As retail sentiment continues to move faster than institutional cycles, it represents a powerful force if properly directed \cite{marketwatch2022retail, arxiv2104.01847}.
 
-Redirecting this energy from pure speculation toward structured, valuation-pegged startup exposure could unlock meaningful capital for underserved founders. In this sense, PEG tokens are not just technical artifacts—they are political instruments. They challenge the concentration of venture power, expand the set of founders with access to capital, and provide retail investors with an opportunity to participate in shaping the economic frontier.
+Redirecting this energy from pure speculation toward structured, valuation-pegged startup exposure could unlock meaningful capital for undeserved founders. In this sense, PEG tokens are not just technical artifacts—they are political instruments. They challenge the concentration of venture power, expand the set of founders with access to capital, and provide retail investors with an opportunity to participate in shaping the economic frontier.
 
 
 \section{Extended Analysis of Dual-Token Models}
@@ -188,54 +187,6 @@ To ensure that buybacks reflect fundamentally justified valuations, the protocol
 This structure allows retail and institutional investors to benefit from return estimates and exit strategies anchored in both blockchain transparency and accepted financial practice—even before actual company liquidity events.
 
 \subsection{Buyback Mechanism}
-To ensure that buybacks reflect fundamentally justified valuations, the protocol uses industry-standard Discounted Cash Flow (DCF) techniques as the primary valuation backbone. Projected free cash flows, terminal value conventions and periodic discounting form the DCF core; external parameters (industry multipliers, WACC / discount rates, valuation caps and SAFE interest adjustments) are provided by vetted oracles and configurable governance parameters.
-
-The whitepaper encodes a compact, on‑chain computable representation of this workflow to derive a deterministic buyback multiplier. In the MVP specification (and the accompanying Tokenomics RMSC.ods) we express the core relations as:
-
-\[
-\text{Valuation}_{\text{on‑chain}} \;\approx\; \text{DCF}(\{\text{FCF}_t\},\,r) \;\;\xrightarrow{\text{SAFE+I, cap}}\;\;
-\text{Tk\_ROI} \;=\; \max\!\Big(\text{Valuation},\,\frac{\text{Valuation}}{\text{ValuationCap}}\Big)
-\]
-
-and the per‑token buyback price is computed as
-
-\[
-\text{TK\_BUY\_BACK\_PRICE} \;=\; \text{Tk\_ROI}\times\text{Price\_at\_mint\_avg},
-\]
-
-where SAFE+I adjustments (interest factor \(I\) and elapsed time \(t\)), the discount factor \(r\) (WACC), and any ValuationCap are oracle/governance inputs. A compact form used in project notes is:
-
-\[
-\text{Valuation} \;=\; \frac{(1+I)^{t}}{1-D}
-\]
-
-as a shorthand for the SAFE+interest adjustment combined with discounting; in production this shorthand is implemented by the full DCF routine referenced above. All calculations, inputs and milestone flags are recorded or attested on‑chain so that buyback triggers and prices are auditable and executable by smart contracts without off‑chain negotiation.
-
-Operationally: oracles publish financial inputs and milestones, the accountancy/orchestrator computes the DCF‑based valuation and resulting Tk_ROI, and the automated buyback contract executes purchases of RMSC at the computed TK_BUY_BACK_PRICE subject to treasury liquidity and any governance approvals.
-
-Note: these valuation and buyback formulas are presented here in the context of The Calçotada Company—the protocol's initial sponsor and first implementation. The projection tables and numeric scenarios that illustrate this mechanism are provided in the Appendix; the same DCF + SAFE+I buyback framework can be parameterized by other startups adopting the Calçotada Protocol.
-\subsection{Buyback Mechanism}
-To ensure that buybacks reflect fundamentally justified valuations, the protocol uses industry-standard Discounted Cash Flow (DCF) techniques as the primary valuation backbone. Projected free cash flows, terminal value conventions and periodic discounting form the DCF core; external parameters (industry multipliers, WACC / discount rates, valuation caps and SAFE interest adjustments) are provided by vetted oracles and configurable governance parameters.
-
-% Replace inline/misaligned equations with a full-width figure* so they fit the two-column layout
-\begin{figure*}[!t]
-\normalsize
-\begin{equation}
-\begin{aligned}
-\text{Valuation}_{\text{on‑chain}} &\;\approx\; \mathrm{DCF}(\{\mathrm{FCF}_t\},\,r)
-\;\xrightarrow{\text{SAFE+I, cap}}\;
-\mathrm{Tk\_ROI} \;=\; \max\!\Big(\mathrm{Valuation},\,\frac{\mathrm{Valuation}}{\mathrm{ValuationCap}}\Big),\\[6pt]
-\mathrm{TK\_BUY\_BACK\_PRICE} &= \mathrm{Tk\_ROI}\times\mathrm{Price\_at\_mint\_avg},\\[6pt]
-\mathrm{Valuation} &= \dfrac{(1+I)^{\{t\}}}{1-D}.
-\end{aligned}
-\end{equation}
-\caption{Compact, on‑chain computable representation of DCF + SAFE+I buyback relations. This figure spans both columns so the equations render cleanly within the IEEEtran two‑column layout.}
-\label{fig:buyback_eqs}
-\end{figure*}
-
-The whitepaper encodes a compact, on‑chain computable representation of this workflow to derive a deterministic buyback multiplier. In the MVP specification (and the accompanying Tokenomics RMSC.ods) we express the core relations as above. All calculations, inputs and milestone flags are recorded or attested on‑chain so that buyback triggers and prices are auditable and executable by smart contracts without off‑chain negotiation.
-
-Operationally: oracles publish financial inputs and milestones, the accountancy/orchestrator computes the DCF‑based valuation and resulting Tk_ROI, and the automated buyback contract executes purchases of RMSC at the computed TK_BUY_BACK_PRICE subject to treasury liquidity and any governance approvals.
 
 
 \subsection{Additional Key Assets}
@@ -248,7 +199,6 @@ Operationally: oracles publish financial inputs and milestones, the accountancy/
 \section{Protocol Architecture}
 
 \input{diagram.tex}
-% \input{calcotada_protocol_diagram.tex}
 
 The Calçotada Protocol implements a sophisticated two-asset system deployed on the Polygon blockchain to facilitate decentralized venture funding. The architecture consists of four core smart contracts that work in concert: CalcotCoin (NFT), Romesco (RMSC token), Calçotada (orchestrator), and NormalizeToEuro (oracle integration). This system combines governance through non-fungible tokens (NFTs) with economic participation via fungible tokens (RMSC) that are designed to track company valuation.
 
