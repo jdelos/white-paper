@@ -1,0 +1,47 @@
+# LaTeX intermediate and output files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+
+# Editor swap/backup files
+*~
+*.swp
+*.swo
+*.bak
+
+# PDF output
+*.pdf
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Latexmk
+latexmkrc
+
+# VSCode
+.vscode/
