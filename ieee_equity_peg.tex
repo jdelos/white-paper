@@ -12,6 +12,10 @@
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric}
 \usepackage{pagecolor}
 
+% add for full-width equations in two-column layout
+\usepackage{cuted}      % provides strip environment for full-width equations
+\usepackage{stfloats}   % improved placement for figure*/table* floats
+
 % Define a very gentle pastel green for the background
 \definecolor{gentlegreen}{RGB}{245, 252, 245}
 \pagecolor{gentlegreen}
@@ -182,6 +186,57 @@ This enables:
 To ensure that buybacks reflect fundamentally justified valuations, the protocol leverages conventional startup valuation techniques. The accompanying \texttt{Tokenomics RMSC.ods} model calculates buyback scenarios and expected valuations based on revenue multiples, discounted cash flows, or other startup-typical factors. These methods are encoded in oracles or contract formulas, supporting automated, auditable financial flows without need for off-chain negotiations.
 
 This structure allows retail and institutional investors to benefit from return estimates and exit strategies anchored in both blockchain transparency and accepted financial practice—even before actual company liquidity events.
+
+\subsection{Buyback Mechanism}
+To ensure that buybacks reflect fundamentally justified valuations, the protocol uses industry-standard Discounted Cash Flow (DCF) techniques as the primary valuation backbone. Projected free cash flows, terminal value conventions and periodic discounting form the DCF core; external parameters (industry multipliers, WACC / discount rates, valuation caps and SAFE interest adjustments) are provided by vetted oracles and configurable governance parameters.
+
+The whitepaper encodes a compact, on‑chain computable representation of this workflow to derive a deterministic buyback multiplier. In the MVP specification (and the accompanying Tokenomics RMSC.ods) we express the core relations as:
+
+\[
+\text{Valuation}_{\text{on‑chain}} \;\approx\; \text{DCF}(\{\text{FCF}_t\},\,r) \;\;\xrightarrow{\text{SAFE+I, cap}}\;\;
+\text{Tk\_ROI} \;=\; \max\!\Big(\text{Valuation},\,\frac{\text{Valuation}}{\text{ValuationCap}}\Big)
+\]
+
+and the per‑token buyback price is computed as
+
+\[
+\text{TK\_BUY\_BACK\_PRICE} \;=\; \text{Tk\_ROI}\times\text{Price\_at\_mint\_avg},
+\]
+
+where SAFE+I adjustments (interest factor \(I\) and elapsed time \(t\)), the discount factor \(r\) (WACC), and any ValuationCap are oracle/governance inputs. A compact form used in project notes is:
+
+\[
+\text{Valuation} \;=\; \frac{(1+I)^{t}}{1-D}
+\]
+
+as a shorthand for the SAFE+interest adjustment combined with discounting; in production this shorthand is implemented by the full DCF routine referenced above. All calculations, inputs and milestone flags are recorded or attested on‑chain so that buyback triggers and prices are auditable and executable by smart contracts without off‑chain negotiation.
+
+Operationally: oracles publish financial inputs and milestones, the accountancy/orchestrator computes the DCF‑based valuation and resulting Tk_ROI, and the automated buyback contract executes purchases of RMSC at the computed TK_BUY_BACK_PRICE subject to treasury liquidity and any governance approvals.
+
+Note: these valuation and buyback formulas are presented here in the context of The Calçotada Company—the protocol's initial sponsor and first implementation. The projection tables and numeric scenarios that illustrate this mechanism are provided in the Appendix; the same DCF + SAFE+I buyback framework can be parameterized by other startups adopting the Calçotada Protocol.
+\subsection{Buyback Mechanism}
+To ensure that buybacks reflect fundamentally justified valuations, the protocol uses industry-standard Discounted Cash Flow (DCF) techniques as the primary valuation backbone. Projected free cash flows, terminal value conventions and periodic discounting form the DCF core; external parameters (industry multipliers, WACC / discount rates, valuation caps and SAFE interest adjustments) are provided by vetted oracles and configurable governance parameters.
+
+% Replace inline/misaligned equations with a full-width figure* so they fit the two-column layout
+\begin{figure*}[!t]
+\normalsize
+\begin{equation}
+\begin{aligned}
+\text{Valuation}_{\text{on‑chain}} &\;\approx\; \mathrm{DCF}(\{\mathrm{FCF}_t\},\,r)
+\;\xrightarrow{\text{SAFE+I, cap}}\;
+\mathrm{Tk\_ROI} \;=\; \max\!\Big(\mathrm{Valuation},\,\frac{\mathrm{Valuation}}{\mathrm{ValuationCap}}\Big),\\[6pt]
+\mathrm{TK\_BUY\_BACK\_PRICE} &= \mathrm{Tk\_ROI}\times\mathrm{Price\_at\_mint\_avg},\\[6pt]
+\mathrm{Valuation} &= \dfrac{(1+I)^{\{t\}}}{1-D}.
+\end{aligned}
+\end{equation}
+\caption{Compact, on‑chain computable representation of DCF + SAFE+I buyback relations. This figure spans both columns so the equations render cleanly within the IEEEtran two‑column layout.}
+\label{fig:buyback_eqs}
+\end{figure*}
+
+The whitepaper encodes a compact, on‑chain computable representation of this workflow to derive a deterministic buyback multiplier. In the MVP specification (and the accompanying Tokenomics RMSC.ods) we express the core relations as above. All calculations, inputs and milestone flags are recorded or attested on‑chain so that buyback triggers and prices are auditable and executable by smart contracts without off‑chain negotiation.
+
+Operationally: oracles publish financial inputs and milestones, the accountancy/orchestrator computes the DCF‑based valuation and resulting Tk_ROI, and the automated buyback contract executes purchases of RMSC at the computed TK_BUY_BACK_PRICE subject to treasury liquidity and any governance approvals.
+
 
 \subsection{Additional Key Assets}
 \begin{itemize}
