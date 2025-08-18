@@ -55,22 +55,22 @@ ceba.contract@lacalcotada.com}}
 \thispagestyle{plain} % Ensure page number on first page
 
 \begin{abstract}
-The Calçotada Protocol turns seed capital—high-return Real World Assets traditionally reserved for venture capitalists—into performance-pegged tokens called Performance Equity Growth (PEG) tokens. These tokens track company valuation milestones and feature protocol-enforced buybacks inspired by convertible notes, giving retail investors structured exposure to the same upside potential that drives early-stage funding rounds. This document presents an early MVP implementation and lays the foundation for a broader, community-driven protocol. We invite collaborators—from financial engineers to DAO architects—to help shape this emerging standard and support its development through grants and other contributions. By channeling speculative energy toward real company growth, the Calçotada Protocol creates a new class of venture-backed assets and opens a powerful funding channel for traditional startups outside the crypto-native sphere.
+The Calçotada Protocol turns seed capital—high-return Real World Assets traditionally reserved for venture capitalists—into performance-pegged tokens called Performance Equity Growth (PEG) tokens. These tokens track company valuation milestones and feature protocol-enforced buybacks inspired by a convertible note, using a Dynamic Convertibility Condition (DCC) method to enable buybacks outside a larger sale. This gives retail investors structured exposure to the same upside potential that drives early-stage funding rounds.
+
+This document presents an early MVP implementation and lays the foundation for a broader, community-driven protocol. We invite collaborators—from financial engineers to DAO architects—to help shape this emerging standard and support its development through grants and other contributions. By channeling speculative energy toward real company growth, the Calçotada Protocol—named after the Catalan communal food feast—creates a new class of venture-backed assets and opens a powerful funding channel for traditional startups outside the crypto-native sphere.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Blockchain, Venture Capital, Equity Peg Token, Retail Investing, Tokenized Buyback, DAO, Open Specification, Real World Assets, Starup Funding
+Blockchain, Venture Capital, Real World Assets (RWAs), Performance-Pegged Tokens (PEGs), Tokenized Private Equity, Startup Funding, Retail Investing, Protocol-Enforced Buybacks, Decentralized Autonomous Organization (DAO), Open Protocol
 \end{IEEEkeywords}
 
 \section{Introduction: A Foundation for Real-World Crypto Value}
 
-While blockchain has the potential to transform financial systems, much of today’s crypto landscape is dominated by speculative, zero-utility assets—most notably, meme coins. These tokens attract massive retail attention yet contribute little to real economic value creation. The result is a cycle of hype, volatility, and financial loss that undermines trust in the broader promise of Web3 as a foundation for meaningful innovation.
+While blockchain has the potential to transform financial systems, a significant portion of the crypto landscape is dominated by speculative, zero-utility assets that contribute little to real economic value. This creates a cycle of hype and volatility that undermines trust in Web3's promise as a foundation for meaningful innovation. At the same time, traditional venture capital remains a centralized and exclusive industry, leaving many high-potential founders without access to early-stage capital.
 
-At the same time, startup founders continue to face structural barriers to early-stage capital. Traditional venture capital remains concentrated in the hands of a few players, often funding only a narrow set of trends and gatekeeping access to company-building resources. This leaves many high-potential founders without access to seed funding, even when their ideas have strong market validation or cultural relevance.
+The \textbf{Calçotada Protocol}—the official proposal by The Calçotada Company to raise its seed round—proposes a new, community-driven path by introducing a class of Performance Equity Growth (PEG) tokens. These tokens bridge the gap between speculative crypto capital and real-world company growth by aligning token value directly with company success. PEG tokens are issued against company valuation milestones and are governed by smart contracts that enforce financial transparency and buyback mechanisms. Inspired by convertible notes, the protocol uses a \textbf{Dynamic Convertibility Condition (DCC) method} to enable buybacks outside of a traditional exit event, providing retail investors with structured exposure to the same upside potential that drives early-stage funding rounds.
 
-The Calçotada Protocol proposes a new path. By introducing a class of Performance Equity Growth (PEG) tokens, we present a framework for aligning token value with company success. These tokens are issued against valuation milestones and governed by smart contracts that enforce financial transparency and buyback mechanisms. For investors, this offers exposure to real-world growth with access to liquidity and governance. For founders, it opens a new channel of capital that is faster, more inclusive, and tied to transparent valuation logic.
-
-For blockchain ecosystems, the protocol creates a new layer of composability by embedding algorithmic venture capital directly into smart contracts. By defining a transparent, programmable approach to seed funding, it opens the door to secondary financial products that can bring much-needed liquidity to the otherwise illiquid early-stage market. Traditional VC investments are often characterized by long holding periods, limited exit opportunities, and a lack of intermediaries, making it challenging for investors to realize returns before a company goes public or is acquired. The Calçotada Protocol aims to address these challenges by introducing mechanisms that facilitate earlier liquidity events, thereby enhancing the overall efficiency and accessibility of venture capital markets.
+This paper presents the protocol as both a Minimum Viable Product (MVP) and an open specification. By defining a transparent, programmable approach to seed funding, it challenges the concentration of venture power and expands access to capital for a more diverse range of founders. Our work directly addresses the limitations of existing token-based financing models, which often lack a strict link between token value and company performance. It transforms speculation into structured investment, paving the way for a more robust and inclusive economic system built on blockchain infrastructure.
 
 \subsection{Protocol Development Anchored in Real Operations}
 
@@ -79,33 +79,16 @@ Critically, the Calçotada Protocol is not merely theoretical. Its initial devel
 This parallel development places The Calçotada Company in a unique position as a test bench for Web3 integration. The startup can experiment with blockchain-based governance, tokenized financial flows, and smart contract logic, while simultaneously exploring applications within traditional operations, such as e-commerce and app development. This applied approach enables rigorous testing of buyback mechanisms, community governance, and financial interactions in a live environment, creating a higher-trust, more credible foundation for both the company and the broader protocol rollout.
 
 
-This paper introduces the protocol as both a Minimum Viable Product (MVP) and an open specification. While we acknowledge the role traditional VC has played in advancing innovation, we also recognize its limitations in scope and inclusivity. By enabling startup capital formation through PEG tokens, we open a new source of venture capital—one powered by community participation, blockchain transparency, and a more diverse range of ideas entering the economic system.
+\section{State of the Art: The Problem of Disconnected Capital}
 
-\section{The Calçotada Tradition: A Symbol of Collective Participation}
+The promise of blockchain is often met with the reality of disconnected capital. On one side, startups—especially those with real-world products—face a significant challenge in raising seed capital. Traditional venture capital is a centralized system that often overlooks founders outside of its established networks, creating a \textbf{funding gap} for a diverse range of innovative ideas.
 
-The Calçotada Protocol draws its name and inspiration from the Catalan tradition of \textit{la calçotada}, a communal feast recognized by UNESCO for its cultural significance. This tradition embodies collaboration, shared effort, and collective success—values mirrored in democratizing access to venture capital. The protocol is also directly linked to its sponsoring entity, \textit{The Calçotada Company}, and retaining these names reinforces the connection between the protocol, its community, and the company.
+On the other side, the crypto market is flooded with massive amounts of retail investment. However, this capital is largely funneled into speculative ventures like meme coins and highly volatile altcoins, creating a cycle of pump-and-dump schemes with no connection to real-world value creation. While often dismissed as irrational, these investors are simply seeking accessible, high-risk, high-return opportunities that are unavailable in traditional markets.
 
-The protocol's dual-token architecture reflects this heritage:
+This paper presents a humble proposal to bridge these two worlds. We believe the capital and enthusiasm of retail investors can be redirected from pure speculation toward tangible innovation. The \textbf{Calçotada Protocol} is designed to transform this currently unstructured energy into a new, inclusive form of venture capital, where high-risk, high-return opportunities are based not on hype, but on real-world company creation.
 
-\begin{itemize}
-    \item \textbf{The NFT (Calçot-Coin)}: Represents governance and participation. Each NFT holder becomes part of the decision-making collective, with voting rights and access to benefits as the company and protocol grow. NFTs symbolize the community's engagement and long-term alignment with the protocol's success.
+Our inspiration comes from protocols like MakerDAO, which use algorithmic principles to create a stablecoin, DAI, that is transparent and collateral-backed. We believe these same principles can be applied to create a new kind of asset: the \textbf{Performance Equity Growth (PEG) token}.
 
-    \item \textbf{The RMSC Token (Romesco)}: Represents capital and returns. RMSC is freely available, tradeable, and designed to capture company performance while remaining detached from governance, ensuring that influence is not concentrated among large holders.
-\end{itemize}
-
-Retaining the Calçotada and Romesco names establishes a distinctive, culturally resonant identity, linking the protocol to \textit{The Calçotada Company}. This connection provides strategic value by ensuring brand consistency, clear ownership, and long-term visibility, supporting both the growth of the protocol and the sponsoring company.
-
-
-
-\section{State of the Art: Venture Capital, Tokenization, and Speculation}
-
-The rise of blockchain has introduced a new class of financial primitives—tokens—that allow for programmable ownership, decentralized governance, and borderless capital formation. These innovations have prompted a wave of alternative fundraising models for startups, most notably Initial Coin Offerings (ICOs), token presales, and security token offerings (STOs). However, despite their structural novelty, most of these approaches have failed to address one fundamental challenge: the link between token value and real company performance.
-
-\subsection{The Tunnel Vision of Venture Capital}
-
-In \textit{Power and Progress} (2023), Acemoglu and Johnson open with a powerful critique of how technological trajectories are shaped. They argue that innovation, rather than being a neutral force for collective uplift, often serves the narrow agendas of those controlling capital flows. In the context of venture capital, this dynamic manifests as \textit{tunnel vision}—where funding flows toward ideas aligned with dominant investor interests, not necessarily those with the most societal relevance or disruptive potential.
-
-This systemic bias is amplified by the structure of the VC industry itself, which filters startup potential through a small number of high-net-worth individuals and institutions. The result is a cycle of centralized decision-making and trend-following capital allocation, as documented in works by Gompers and Lerner \cite{gompers2004venture} and more recently by Kenney and Zysman \cite{kenney2019platform}.
 
 \subsection{The Rise—and Limits—of Token-Based Startup Financing}
 Blockchain-based financing emerged as a promising alternative to VC dominance. ICOs, in particular, were initially seen as a democratized fundraising mechanism. However, studies such as Howell et al. (2020)~\cite{howell2020initial} and Catalini \& Gans (2019)~\cite{catalini2019some} found that token value in these offerings was often driven by speculative market sentiment rather than by startup fundamentals. The lack of intrinsic utility or rights backing these tokens made them volatile and prone to pump-and-dump cycles.
@@ -873,6 +856,21 @@ Future research will explore:
 
 The Calçotada Protocol MVP demonstrates the technical feasibility of tokenized venture funding while prioritizing community validation and sustainable growth. By starting with a focused Genesis collection of 333 NFTs, the protocol seeks to validate market interest, build a dedicated team, and establish fundamental standards before expanding to its full vision. This measured approach ensures that when the protocol scales to support The Calçotada Company's operations and eventual buybacks, it will do so with proven mechanics, community trust, and a clear path to delivering value to all stakeholders. The journey from MVP to full protocol implementation represents not just a technical roadmap, but a new model for inclusive, transparent venture capital.
 
+
+\appendix
+\section{Cultural Inspiration: The Calçotada Tradition}
+
+We'll be the first to admit it: a blockchain protocol named after a charred onion is unusual. But a \textit{calçot} is no ordinary onion. When grilled over an open flame, its outer layers burn away to reveal a heart of astonishingly sweet, tender deliciousness, perfect for dipping in a rich romesco sauce. The Calçotada Protocol draws its name from this Catalan tradition of \textit{la calçotada}, a communal feast that embodies shared effort and collective success—values we believe mirror our mission to democratize access to venture capital.
+
+Beyond the symbolism, the names are a bit of fun that links the protocol directly to its sponsoring entity, \textbf{The Calçotada Company}. We believe that the success of our fundraising will bring us all a step closer to earning a seat at a real \textit{calçotada} feast. It's a culinary reward for a financial breakthrough.
+
+The protocol's dual-token architecture reflects this heritage:
+\begin{itemize}
+    \item \textbf{The NFT (Calçot-Coin)}: Represents governance and participation. NFT holders are part of the decision-making collective, with voting rights and access to benefits as the company and protocol grow. This also guarantees participation in yearly meetings to try and enjoy the company’s products. The NFTs are freely tradable, and holders will have founding advantages in financing and the use of services.
+    \item \textbf{The RMSC Token (Romesco)}: Represents capital and returns. The freely tradable RMSC token is designed to capture company performance while remaining detached from governance, preventing the concentration of influence among large holders. The secret, after all, is in the sauce.
+\end{itemize}
+
+Ultimately, retaining these names provides a distinctive, culturally resonant identity, reinforcing the connection between the protocol and The Calçotada Company, and ensuring brand consistency and long-term visibility.
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 
