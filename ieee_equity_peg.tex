@@ -117,7 +117,6 @@ Far from being irrational, these users are seeking accessible, high-upside entry
 
 Redirecting this energy from pure speculation toward structured, valuation-pegged startup exposure could unlock meaningful capital for undeserved founders. In this sense, \textbf{PEG tokens} are not just technical artifacts—they are social and economical instruments. They challenge the concentration of venture power, expand the set of founders with access to capital, and provide retail investors with an opportunity to participate in shaping the economic frontier.
 
-\section{Extended Analysis of Dual-Token Models}
 
 \section{Fundamental Key Assets and On-Chain Accountancy}
 A primary innovation of the Calçotada Protocol is the incorporation of on-chain accountancy as a transparent foundation for venture valuations, investor returns, and protocol trust. This section reviews the strategic assets necessary for protocol integrity and public confidence, highlighting how on-chain financial tracking directly informs estimated valuations and buyback commitments.
@@ -162,11 +161,11 @@ All inputs, intermediate calculations and milestone flags are recorded or attest
     \item \textbf{Decentralized Governance:} Founder NFTs enable participatory protocol upgrades and control structures.
 \end{itemize}
 
-\section{Protocol Architecture}
+\section{Protocol MVP Implementation}
 
 \input{diagram.tex}
 
-The Calçotada Protocol implements a sophisticated two-asset system deployed on the Polygon blockchain to facilitate decentralized venture funding. The architecture consists of four core smart contracts that work in concert: CalcotCoin (NFT), Romesco (RMSC token), Calçotada (orchestrator), and NormalizeToEuro (oracle integration). This system combines governance through non-fungible tokens (NFTs) with economic participation via fungible tokens (RMSC) that are designed to track company valuation.
+The Calçotada Protocol implements a sophisticated two-asset system. The architecture consists of four core smart contracts that work in concert: CalcotCoin (NFT), Romesco (RMSC token), Calçotada (orchestrator), and NormalizeToEuro (oracle integration). This system combines governance through non-fungible tokens (NFTs) with economic participation via fungible tokens (RMSC) that are designed to track company valuation.
 
 \subsection{CalcotCoin NFT: Governance and Foundational Access}
 
@@ -195,9 +194,9 @@ The \textit{CalcotCoin} (CEBA) contract implements an ERC721 NFT system designed
 \textbf{Minting Mechanism:}
 The CalcotCoin contract implements a sophisticated dual-minting system where NFT purchases trigger a 2x RMSC mint. When purchasing an NFT:
 \begin{enumerate}
-    \item The buyer receives 2x the NFT price in newly minted RMSC
-    \item Half of the RMSC is automatically transferred to the treasury as payment
-    \item The buyer retains the other half as a bonus incentive
+    \item The buyer receives participation price in newly minted RMSC
+    \item Half of the RMSC is automatically transferred to the treasury as payment for the NFT
+    \item The buyer retains the other half of minted RMSC as a bonus incentive
     \item The NFT is minted to the buyer's address
 \end{enumerate}
 
@@ -205,7 +204,8 @@ The CalcotCoin contract implements a sophisticated dual-minting system where NFT
 \begin{itemize}
     \item One vote per wallet (implementation pending)
     \item Participation in valuation recognition and capital allocation decisions
-    \item Access to exclusive founder communications
+    \item Access to exclusive founder investment opportunities and communications
+    \item Access to special offerings, discounts and events
 \end{itemize}
 
 Note: The whitepaper originally specified 6 batches totaling 5,888 NFTs. The current implementation focuses on the initial 333-unit genesis collection, with future batches to be deployed based on protocol evolution and community feedback.
@@ -239,7 +239,7 @@ The \textit{Romesco Token (RMSC)} is the core financial instrument of the protoc
     \item Minting controlled by the orchestrator contract only
     \item No burn functionality for regular users (maintains supply integrity)
     \item Designed for future buyback mechanism at €1.5–€3.0 per RMSC
-    \item Starting valuation implies approximately €0.40–€0.60 per RMSC
+    \item Starting valuation implies approximately €0.40–€0.70 per RMSC
 \end{itemize}
 
 \textbf{Integration Features:}
@@ -685,42 +685,7 @@ Many questions remain unanswered—optimal update frequencies, discount rates fo
 
 The Calçotada Protocol is more than technology; it's a movement toward democratized, transparent, and accessible startup funding. Join us in creating the future of venture capital.
 
-\section{The Calçotada Company: Protocol Sponsor}
 
-\subsection{Company Overview}
-
-The Calçotada Company is a Barcelona-based food-tech startup pioneering Food Experience as a Service (FEaaS). As the primary sponsor and first implementation of the Calçotada Protocol, the company serves as both a proof of concept and a real-world test case for tokenized venture funding.
-
-\subsection{Business Model: FEaaS}
-
-Food Experience as a Service (FEaaS) represents a paradigm shift in the hospitality industry:
-
-\begin{itemize}
-    \item \textbf{Scalable Culinary Experiences:} Transforming traditional dining into reproducible, high-quality experiences
-    \item \textbf{Technology-Enabled Operations:} Leveraging automation and data analytics to optimize food service
-    \item \textbf{Franchise-Ready Model:} Creating standardized processes that maintain authenticity while enabling rapid expansion
-    \item \textbf{Cultural Preservation:} Protecting and promoting traditional Catalan cuisine through modern business practices
-\end{itemize}
-
-\subsection{Why Calçotada?}
-
-The company takes its name from the traditional Catalan calçotada—a communal feast celebrating spring onions. This choice reflects:
-\begin{itemize}
-    \item Community-driven values aligned with DAO principles
-    \item Scalable social experiences perfect for FEaaS model
-    \item Strong cultural identity providing market differentiation
-    \item Natural alignment between shared meals and shared ownership
-\end{itemize}
-
-\subsection{Protocol Synergy}
-
-The Calçotada Company's use of the protocol demonstrates:
-\begin{itemize}
-    \item Real revenue generation for buyback mechanisms
-    \item Clear valuation metrics through operational data
-    \item Community engagement through product and investment
-    \item Bridge between physical business and digital assets
-\end{itemize}
 
 \section{Team and Acknowledgments}
 
@@ -821,6 +786,43 @@ The Calçotada Protocol MVP demonstrates the technical feasibility of tokenized 
 
 
 \appendix
+\section{The Calçotada Company: Protocol Sponsor}
+
+\subsection{Company Overview}
+
+The Calçotada Company is a Barcelona-based food-tech startup pioneering Food Experience as a Service (FEaaS). As the primary sponsor and first implementation of the Calçotada Protocol, the company serves as both a proof of concept and a real-world test case for tokenized venture funding.
+
+\subsection{Business Model: FEaaS}
+
+Food Experience as a Service (FEaaS) represents a paradigm shift in the hospitality industry:
+
+\begin{itemize}
+    \item \textbf{Scalable Culinary Experiences:} Transforming traditional dining into reproducible, high-quality experiences
+    \item \textbf{Technology-Enabled Operations:} Leveraging automation and data analytics to optimize food service
+    \item \textbf{Franchise-Ready Model:} Creating standardized processes that maintain authenticity while enabling rapid expansion
+    \item \textbf{Cultural Preservation:} Protecting and promoting traditional Catalan cuisine through modern business practices
+\end{itemize}
+
+\subsection{Why Calçotada?}
+
+The company takes its name from the traditional Catalan calçotada—a communal feast celebrating spring onions. This choice reflects:
+\begin{itemize}
+    \item Community-driven values aligned with DAO principles
+    \item Scalable social experiences perfect for FEaaS model
+    \item Strong cultural identity providing market differentiation
+    \item Natural alignment between shared meals and shared ownership
+\end{itemize}
+
+\subsection{Protocol Synergy}
+
+The Calçotada Company's use of the protocol demonstrates:
+\begin{itemize}
+    \item Real revenue generation for buyback mechanisms
+    \item Clear valuation metrics through operational data
+    \item Community engagement through product and investment
+    \item Bridge between physical business and digital assets
+\end{itemize}
+
 \section{Cultural Inspiration: The Calçotada Tradition}
 
 We'll be the first to admit it: a blockchain protocol named after a charred onion is unusual. But a \textit{calçot} is no ordinary onion. When grilled over an open flame, its outer layers burn away to reveal a heart of astonishingly sweet, tender deliciousness, perfect for dipping in a rich romesco sauce. The Calçotada Protocol draws its name from this Catalan tradition of \textit{la calçotada}, a communal feast that embodies shared effort and collective success—values we believe mirror our mission to democratize access to venture capital.
