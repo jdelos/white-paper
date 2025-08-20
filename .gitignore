@@ -24,6 +24,7 @@
 *.nav
 *.snm
 *.vrb
+*.kate-swp
 
 # Editor swap/backup files
 *~
@@ -32,7 +33,7 @@
 *.bak
 
 # PDF output
-*.pdf
+
 
 # MacOS
 .DS_Store
@@ -42,6 +43,8 @@ Thumbs.db
 
 # Latexmk
 latexmkrc
+
+campaigns
 
 # VSCode
 .vscode/
