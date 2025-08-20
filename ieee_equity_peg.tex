@@ -16,9 +16,8 @@
 \usepackage{cuted}      % provides strip environment for full-width equations
 \usepackage{stfloats}   % improved placement for figure*/table* floats
 
-% Define a very gentle pastel green for the background
-\definecolor{gentlegreen}{RGB}{245, 252, 245}
-\pagecolor{gentlegreen}
+\usepackage{booktabs}
+\usepackage{makecell}
 
 % Hyperref package for PDF bookmarks and outlines
 \usepackage[bookmarks=true,
@@ -36,8 +35,19 @@
             citecolor=black,
             urlcolor=blue,
             filecolor=black]{hyperref}
-\usepackage{bookmark} % Enhanced bookmark handling
 
+\usepackage{bookmark} % Enhanced bookmark handling
+\usepackage{microtype}
+\usepackage{xurl}
+\usepackage{hyperref}
+\usepackage{tabularx}
+
+\setlength{\emergencystretch}{3em}
+\sloppy
+
+% Define a very gentle pastel green for the background
+\definecolor{gentlegreen}{RGB}{245, 252, 245}
+\pagecolor{gentlegreen}
 \begin{document}
 
 % Force page numbers to appear
@@ -117,49 +127,123 @@ Far from being irrational, these users are seeking accessible, high-upside entry
 
 Redirecting this energy from pure speculation toward structured, valuation-pegged startup exposure could unlock meaningful capital for undeserved founders. In this sense, \textbf{PEG tokens} are not just technical artifacts—they are social and economical instruments. They challenge the concentration of venture power, expand the set of founders with access to capital, and provide retail investors with an opportunity to participate in shaping the economic frontier.
 
+\section{Fundamentals of the Calçotada Protocol}
 
-\section{Fundamental Key Assets and On-Chain Accountancy}
-A primary innovation of the Calçotada Protocol is the incorporation of on-chain accountancy as a transparent foundation for venture valuations, investor returns, and protocol trust. This section reviews the strategic assets necessary for protocol integrity and public confidence, highlighting how on-chain financial tracking directly informs estimated valuations and buyback commitments.
+The core principle behind the protocol is that the return on investment (ROI) and value appreciation of the issued tokens are achieved through a mechanism of \textbf{buybacks}. This system is built on the assumption that the sponsoring startup, serving as the issuing company, has a profitable business model that will increase its valuation over time.
 
-\subsection{On-Chain Accountancy}
-Unlike traditional venture frameworks—where assessment of company value and investor ROI rely on opaque, often delayed financial reporting—the Calçotada Protocol mandates continuous, verifiable financial accounting on-chain. All critical financial flows (revenue, costs, operational reserves, distributions) are recorded in transparent smart contracts.
-
-This enables:
+Acting as a black box, the protocol extracts the company’s valuation based on two market principles:
 \begin{itemize}
-    \item \textbf{Real-time, tamper-proof valuation:} Investors and protocol governors can view up-to-date figures at any point, reducing ambiguity or information asymmetry.
-    \item \textbf{Reliable ROI estimates:} Using industry-standard financial metrics (see next subsection), the protocol can project and periodically update company valuations and potential ROI for token holders.
-    \item \textbf{Algorithmic buyback triggers:} Token buyback amounts and conditions are derived from on-chain accounting data, automating investor returns and aligning incentives.
+\item \textbf{Discounted Cash Flow (DCF) Method:} An analytical methodology used to calculate a deterministic, on-chain valuation.
+\item \textbf{Open Market Exit:} The traditional path to liquidity for a startup.
+\end{itemize}
+Based on this calculated valuation, the company provides regular buyback opportunities, allowing investors to exit their positions and realize asset liquidity. The specific value of the RMSC token for each buyback is directly determined by the company’s valuation at that time.
+
+\subsection{Dual-Token Issuance and Deflationary System}
+
+The protocol uses a dual-token model, where token issuance reflects real capital added to the company. Both tokens have a \textbf{strictly capped supply} corresponding to the target raise.
+
+\begin{itemize}
+    \item \textbf{CalcotCoin (NFT):} Serves as a founding membership, granting governance rights, access to exclusive company benefits, and priority eligibility for buybacks. NFTs are released in \textbf{batches}, each associated with a round of capital addition. Purchasing an NFT is equivalent to joining as a founding investor. The NFT itself does not guarantee a fixed ROI; its value comes from the combination of benefits, governance privileges, and buyback access.
+
+    \item \textbf{Romesco (RMSC) Token:} A fungible token reflecting the company’s Performance Equity Growth (\textbf{PEG}) value. RMSC tokens are allocated to participants based on their capital contribution, providing financial exposure to the company’s performance. Supply is capped by the total target raise, ensuring tokens are only minted when new capital enters the system.
 \end{itemize}
 
-\subsection{Valuation Methodology and Financial Modeling}
-To ensure that buybacks reflect fundamentally justified valuations, the protocol leverages conventional startup valuation techniques. The accompanying \texttt{Tokenomics RMSC.ods} model calculates buyback scenarios and expected valuations based on revenue multiples, discounted cash flows, or other startup-typical factors. These methods are encoded in oracles or contract formulas, supporting automated, auditable financial flows without need for off-chain negotiations.
+\paragraph{Participation and Token Allocation}
+Capital additions are issued in \textbf{batches}. In each batch, the price of participation increases, reflecting the added value and risk for early investors.
 
-This structure allows retail and institutional investors to benefit from return estimates and exit strategies anchored in both blockchain transparency and accepted financial practice—even before actual company liquidity events.
+Participation proceeds through clearly defined steps:
 
-\subsection{Buyback Mechanism}
-The protocol computes an on‑chain DCF valuation, applies SAFE+interest adjustments and an optional cap, and derives a deterministic token ROI that determines the per‑token buyback price. Oracles supply FCF projections and governance parameters; the accountancy/orchestrator computes the result and the buyback contract executes purchases subject to treasury liquidity and governance.
+\begin{enumerate}
+    \item \textbf{Capital Contribution:} The participant provides capital to join a funding batch.
+    \item \textbf{RMSC Minting:} The contributed capital is converted into newly minted RMSC tokens according to a predefined price bonding curve.
+    \item \textbf{RMSC Allocation:}
+    \begin{itemize}
+        \item \textbf{50\% to Company Treasury:} These tokens serve as RMSC reserves, securing governance and buyback privileges via the NFT.
+        \item \textbf{50\% to Participant:} Retained as a participation bonus, giving direct financial exposure to the company's growth.
+    \end{itemize}
+    \item \textbf{NFT Issuance:} In exchange for the treasury allocation, the participant receives a founding NFT, granting governance rights, community access, and buyback eligibility.
+\end{enumerate}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.45\textwidth]{minting-diagram.pdf}
+\caption{Token minting process sequence diagram}
+\label{fig:minting-strategy}
+\end{figure}
+
+In parallel, there is a \textbf{free pool of RMSC tokens} for participants seeking larger financial exposure beyond the batched issuances.
+
+This mechanism ensures that \textbf{RMSC supply grows strictly in proportion to capital raised}, maintaining a transparent and auditable tokenomics framework. Simultaneously, the \textbf{NFT layer anchors governance, community access, and buyback privileges}, while RMSC serves as the liquid instrument for financial participation.
+
+\subsection{RMSC Treasury and Its Role}
+
+Half of the RMSC tokens minted through NFT purchases are transferred to the \textbf{company treasury} as reserves. This treasury has a strategic purpose:
+
+\begin{itemize}
+    \item \textbf{Liquidity Provision:} A portion of the treasury can be deployed in liquidity pools to support RMSC market activity without increasing total supply.
+    \item \textbf{Airdrops:} The treasury can distribute RMSC to NFT holders as rewards or incentives, strengthening community engagement.
+    \item \textbf{Growth Initiatives:} The treasury provides capital for strategic programs and partnerships, enabling the company to expand its ecosystem while preserving token scarcity.
+\end{itemize}
+
+By maintaining these reserves, the treasury allows the company to execute financial strategies and community programs \textbf{without affecting the capped total supply of RMSC}, ensuring transparency and long-term sustainability of the tokenomics framework.
+
+
+\subsection{Valuation Methodology}
+Startup valuation is inherently challenging due to limited historical data, high uncertainty in cash flows, and rapidly evolving market conditions. Nevertheless, academic research and industry practice support the use of Discounted Cash Flow (DCF) as a rigorous, theoretically grounded approach for estimating firm value, even in early-stage ventures \cite{Laitinen2019,Olsen2019,Arefmanesh2025,Montani2020,Steiger2010}. The DCF methodology provides a transparent, auditable framework that reflects the time value of money and the risk-adjusted potential of future cash flows.
+
+To provide a verifiable and auditable valuation, the protocol proposes a hybrid approach that leverages both a deterministic on-chain model and the potential for a traditional market exit:
+
+\begin{itemize}
+\item \textbf{Dynamic On-Chain Discounted Cash Flow (DCF):}
+The primary valuation method is an on-chain DCF model that can be updated with actual operational data. Instead of relying solely on projected cash flows, past periods are replaced with real company performance metrics, including revenues, costs, margins, and CAPEX. This allows the protocol to calculate a near real-time company valuation ($V_\text{daily}$), bridging traditional DCF theory with dynamic operational insight. By executing the inputs and calculations within smart contracts, the valuation remains tamper-proof, fully transparent, and accessible to all token holders \cite{Laitinen2019,Steiger2010}.
 
 \begin{equation}
-\begin{aligned}
-V_{\text{on-chain}}
-  &\approx \operatorname{DCF}\!\big(\mathrm{FCF}_t, r\big),\\[2pt]
-\mathrm{TkROI}
-  &= \max\!\left( V, \frac{V}{V_{\text{cap}}} \right),\\[2pt]
-P_{\text{buy-back}}
-  &= \mathrm{TkROI} \times \overline{P}_{\text{mint}},\\[4pt]
-V &\approx \frac{(1+I)^{t}}{1-D}
-\end{aligned}
+V_{\text{daily}} = \sum_{t=0}^{T} \frac{\text{FCF}{t,\text{actual}}}{(1+r)^t} + \sum{t=T+1}^{\infty} \frac{\text{FCF}_{t,\text{projected}}}{(1+r)^t}
 \end{equation}
-All inputs, intermediate calculations and milestone flags are recorded or attested on‑chain so buyback triggers and prices are auditable and executable by smart contracts.
 
 
-\subsection{Additional Key Assets}
-\begin{itemize}
-    \item \textbf{Smart Contracts:} All protocol commitments (NFTs, RMSC tokenomics, buybacks, treasury reserve) are transparently on-chain.
-    \item \textbf{External Oracles:} For validation of off-chain revenue or event triggers as needed.
-    \item \textbf{Decentralized Governance:} Founder NFTs enable participatory protocol upgrades and control structures.
+\item \textbf{Open Market Exit:}
+In the event of a traditional liquidity event (e.g., acquisition or Initial Public Offering), the protocol's valuation is superseded by the actual market valuation. This ensures that token holders are aligned with real-world outcomes and can benefit from successful exits, complementing the deterministic DCF framework \cite{Montani2020,Olsen2019}.
 \end{itemize}
+
+\subsection{The Buyback Mechanism}
+
+The buyback mechanism is the core instrument of the tokenomics, controlling both the market supply and the liquidity pool of RMSC tokens. It provides a transparent, decentralized exit route for token holders while preserving company flexibility in valuation and capital management.
+
+The deterministic Token ROI (\(\mathrm{Tk_{ROI}}\)) is computed using the adjusted company valuation and a formal SAFE (Simple Agreement for Future Equity) framework. Unlike traditional SAFEs, the purpose here is not direct equity conversion, but to anchor RMSC token liquidity and enforce price discipline in the open market.
+
+The SAFE-based buyback mechanism is formally defined by four parameters:
+
+\begin{itemize}
+    \item \textbf{Discount Rate (\(d\))} – reduces the effective valuation for early token holders, providing an incentive for early participation.
+    \item \textbf{Valuation Cap (\(V_\text{cap}\))} – the maximum valuation used in calculating ROI, protecting token holders from excessive dilution.
+    \item \textbf{Interest Rate (\(i\))} – a simple accrual representing the time-based value until buyback or conversion.
+    \item \textbf{Conversion Trigger / Maturity (\(T_\text{trigger}\))} – the event or date at which ROI is realized, either via on-chain DCF valuation or a traditional market exit.
+\end{itemize}
+
+Formally, the Token ROI is computed as:
+
+\begin{equation}
+\mathrm{Tk_{ROI}} = \max\Big(   \frac{ (1 + i)^{year}}{ (1 - d)}  , \frac{ V_\text{cap}}{V_\text{on-chain}} \Big)
+\end{equation}
+where:
+
+\begin{itemize}
+    \item \(V_\text{valuation}\) is either the on-chain DCF valuation (\(V_\text{on-chain}\)) or market exit valuation (\(V_\text{market}\)).
+    \item \(\overline{P}_\text{mint}\) is the average mint price of the RMSC of the overall minted supply.
+\end{itemize}
+
+The final per-token buyback price is:
+
+\begin{equation}
+P_\text{buyback} = \mathrm{Tk_{ROI}} \times \overline{P}_\text{mint}
+\end{equation}
+
+All inputs, intermediate calculations, and milestone flags are recorded or attested on-chain, ensuring that the buyback triggers and prices are fully auditable and executable by smart contracts. The execution of buybacks is subject to the company's treasury liquidity and governance oversight.
+
+This buyback mechanism is instrumental in making the tokenomics work by controlling the market supply and liquidity pool of RMSC. It leverages the SAFE framework to allow flexible company valuation and price discovery, benefiting both the company and token holders. Importantly, the mechanism does not directly convert tokens into company equity; instead, it ensures liquidity exists that influences the RMSC token price in the open market.
+
+The SAFE contract has been extensively analyzed in the literature. For example, \cite{Coyle2019} provides a comprehensive survey of seed financing contracts, including SAFEs, and discusses their adoption and implications in early-stage startup funding. Similarly, \cite{Orcutt2020} explores the challenges in valuing young startups and the role of instruments like SAFEs in addressing these challenges.
 
 \section{Protocol MVP Implementation}
 
@@ -352,27 +436,30 @@ The deployed contracts focus on the initial CalcotCoin Genesis collection:
 
 The protocol design accommodates future expansion through additional NFT collections:
 
-\begin{table}[ht]
-\caption{NFT Batches and Associated RMSC Minting}
-\centering
-\scriptsize
-\begin{tabular}{|p{1.5cm}|p{0.6cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|}
-\hline
-\textbf{Batch} & \textbf{NFTs} & \textbf{NFT €} & \textbf{RMSC €} & \textbf{MINT kRMSC} \\
-\hline
-Calçot Coins     & 333  & 100  & 0.40  & 66  \\
-FounderPass 1    & 555  & 125  & 0.50  & 139  \\
-FounderPass 2    & 1111 & 250  & 0.525 & 529  \\
-FounderPass 3    & 1111 & 375  & 0.55  & 757  \\
-FounderPass 4    & 1111 & 500  & 0.575 & 966  \\
-FounderPass 5    & 1111 & 625  & 0.60  & 1,157  \\
-\hline
-\multicolumn{5}{|c|}{\textbf{Total: 5,332 NFTs}} \\
-\multicolumn{5}{|c|}{\textbf{2,047,025 € raised, 1,807,796 RMSC minted}} \\
-\hline
-\end{tabular}
-\end{table}
 
+\begin{table}[ht]
+    \centering
+    % This command makes the multi-line headers bold and centered
+    \renewcommand{\theadalign}{bc}
+    \caption{NFT Batches and Associated RMSC Minting}
+    \label{tab:nft_batches}
+    \begin{tabular}{@{}lcccc@{}}
+        \toprule
+        % Use \thead to create multi-line headers that fit the column
+        \thead{Batch} & \thead{NFT \\ supply} & \thead{Buy-In \\ price (€)} & \thead{$\boldsymbol{\overline{P}_\textbf{mint}}$ \\ (€)} & \thead{RMSC \\ supply} \\
+        \midrule
+        Calçot Coins  & 333   & 100   & 0.40  & 66,000    \\
+        FounderPass 1 & 555   & 125   & 0.50  & 139,000   \\
+        FounderPass 2 & 1111  & 250   & 0.525 & 529,000   \\
+        FounderPass 3 & 1111  & 375   & 0.55  & 757,000   \\
+        FounderPass 4 & 1111  & 500   & 0.575 & 966,000   \\
+        FounderPass 5 & 1111  & 625   & 0.60  & 1,157,000 \\
+        \midrule
+        \multicolumn{5}{c}{\textbf{Total: 5,332 NFTs}} \\
+        \multicolumn{5}{c}{\textbf{2,047,025 € raised, 1,807,796 RMSC minted}} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 
 
